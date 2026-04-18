@@ -1,0 +1,31 @@
+# VCS
+.git
+.gitignore
+.github
+
+# Build artifacts
+bin/
+web-client/dist/
+web-client/node_modules/
+node_modules/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Docs & misc (kept slim — not needed in image)
+docs/
+
+# Local runtime data (never bake into image)
+data/
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.yaml
+
+# Logs
+*.log

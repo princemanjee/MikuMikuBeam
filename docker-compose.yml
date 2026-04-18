@@ -1,0 +1,17 @@
+services:
+  mmb:
+    build: .
+    image: mikumikubeam:latest
+    container_name: mikumikubeam
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Set to "false" to require proxies in data/proxies.txt
+      ALLOW_NO_PROXY: "true"
+      LOG_FORMAT: "console"
+    volumes:
+      - mmb-data:/app/data
+
+volumes:
+  mmb-data:

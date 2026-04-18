@@ -156,6 +156,57 @@ Make sure you have the following installed:
 
 > Don't forget to add the necessary files `data/proxies.txt` and `data/uas.txt`.
 
+## Run with Docker 🐳
+
+The repo ships with a multi-stage `Dockerfile` and a `docker-compose.yml` that builds
+the Go server + React client into a small Alpine-based image.
+
+### Quick start
+
+```bash
+docker compose up -d --build
+# open http://localhost:3000
+```
+
+That's it — the web UI is served on port `3000`. Proxy and user-agent lists persist in
+the `mmb-data` named volume (mounted at `/app/data` inside the container).
+
+### Editing proxies / user agents
+
+Either use the in-UI editor (click the text button next to the beam button), or edit
+the files on the volume directly:
+
+```bash
+# Replace proxies file
+docker compose cp proxies.txt mmb:/app/data/proxies.txt
+
+# Replace user-agents file
+docker compose cp uas.txt mmb:/app/data/uas.txt
+```
+
+### Building a portable image for hand-off
+
+```bash
+# Build
+docker build -t mikumikubeam:latest .
+
+# Export a single tarball you can hand off
+docker save mikumikubeam:latest | gzip > mikumikubeam.tar.gz
+
+# On the recipient's machine
+docker load < mikumikubeam.tar.gz
+docker run -d -p 3000:3000 -v mmb-data:/app/data mikumikubeam:latest
+```
+
+### Configuration
+
+| Env var          | Default    | Purpose                                             |
+|------------------|-----------|-----------------------------------------------------|
+| `ALLOW_NO_PROXY` | `true`    | Allow attacks to run without proxies. Set `false` to require entries in `data/proxies.txt`. |
+| `LOG_FORMAT`     | `console` | Set to `json` for structured logs.                  |
+
+---
+
 ## Usage ⚙️
 
 ### Web Interface 🌐
